@@ -2,33 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Message {
-  id: ID!
-  title: String!
-  content: String!
-  userId: Float!
-  User: User!
-}
-
 type User {
   id: ID!
   name: String!
   email: String!
-  Messages: [Message!]!
 }
 
 type Query {
   users: [User!]!
   user(id: String!): User!
-  messages: [Message!]!
-  message(id: String!): Message!
 }
 
 type Mutation {
   createUser(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!, id: String!): User!
   deleteUser(id: String!): Boolean!
-  createMessage(data: CreateMessageInput!): Message!
 }
 
 input CreateUserInput {
@@ -39,10 +27,4 @@ input CreateUserInput {
 input UpdateUserInput {
   name: String
   email: String
-}
-
-input CreateMessageInput {
-  title: String!
-  content: String!
-  userId: Float!
 }
