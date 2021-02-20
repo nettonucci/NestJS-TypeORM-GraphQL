@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user/user.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
 @ObjectType()
@@ -15,5 +16,12 @@ export class Message {
 
     @Column()
     content: string;
+
+    @Column()
+    userId: number
+
+    @ManyToOne(type => User, user => user.Messages)
+    @JoinColumn({name: "userId"})
+    User: User;
 
 }

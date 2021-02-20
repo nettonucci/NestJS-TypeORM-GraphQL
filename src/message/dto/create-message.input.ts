@@ -10,4 +10,7 @@ export class CreateMessageInput {
     @IsString()
     @IsNotEmpty({message: "Esse campo nåo pode estar vazio"})
     content: string;
+
+    @IsNotEmpty({message: "Esse campo nåo pode estar vazio"})
+    userId: number
 }

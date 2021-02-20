@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Message } from "src/message/message.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
 @Entity()
@@ -14,5 +15,8 @@ export class User {
 
     @Column()
     email: string;
+
+    @OneToMany(type => Message, message => message.userId)
+    Messages: Message[];
 
 }

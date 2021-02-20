@@ -2,16 +2,19 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: ID!
-  name: String!
-  email: String!
-}
-
 type Message {
   id: ID!
   title: String!
   content: String!
+  userId: Float!
+  User: User!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  Messages: [Message!]!
 }
 
 type Query {
@@ -41,4 +44,5 @@ input UpdateUserInput {
 input CreateMessageInput {
   title: String!
   content: String!
+  userId: Float!
 }
