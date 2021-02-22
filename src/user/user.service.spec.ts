@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import TestUtil from './../common/test/TestUtil';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -30,4 +31,17 @@ describe('UserService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  describe('findAllUsers', () => {
+    it('should be list all users', async () => {
+      const user = TestUtil.giveAMeAValidUser();
+      mockRepository.find.mockReturnValue([user, user])
+      const users = await service.findAllUser();
+      expect(users).toHaveLength(2);
+      expect(mockRepository.find).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('')
+
 });
