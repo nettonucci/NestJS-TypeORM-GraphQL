@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import TestUtil from './../common/test/TestUtil';
@@ -63,8 +63,34 @@ describe('UserService', () => {
     it('should return a exception when does not find a user', async () => {
       mockRepository.findOne.mockReturnValue(null);
       expect(service.findUserById('3')).rejects.toBeInstanceOf(NotFoundException)
-      expect(mockRepository.find).toHaveBeenCalledTimes(1)
+      expect(mockRepository.findOne).toHaveBeenCalledTimes(1)
     })
   })
 
+    describe('create user', () => {
+      it('should create a user', async () =>{
+        const user = TestUtil.giveAMeAValidUser()
+        mockRepository.save.mockReturnValue(user)
+        mockRepository.create.mockReturnValue(user)
+        const savedUser = await service.createUser(user)
+
+        expect(savedUser).toMatchObject(user)
+        expect(mockRepository.create).toHaveBeenCalledTimes(1)
+        expect(mockRepository.save).toHaveBeenCalledTimes(1)
+      })
+      it('should return a exception when dosent create a user', async ()=>{
+        const user = TestUtil.giveAMeAValidUser()
+        mockRepository.create.mockReturnValue(user)
+        mockRepository.save.mockReturnValue(null)
+
+        await service.createUser(user).catch(e => {
+          expect(e).toBeInstanceOf(InternalServerErrorException)
+          expect(e).toMatchObject({
+            message: 'Problema para criar um usuario.'
+          })
+        })
+        expect(mockRepository.create).toHaveBeenCalledTimes(1)
+        expect(mockRepository.save).toHaveBeenCalledTimes(1)
+      })
+    })
 });
