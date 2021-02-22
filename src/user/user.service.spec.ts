@@ -93,4 +93,55 @@ describe('UserService', () => {
         expect(mockRepository.save).toHaveBeenCalledTimes(1)
       })
     })
+
+    describe('updateUser', () => {
+      it('should updae a user', async () => {
+        const user = TestUtil.giveAMeAValidUser();
+        const updatedUser = { name: 'Nome Atualizado'}
+        mockRepository.findOne.mockReturnValue(user)
+        mockRepository.update.mockReturnValue({
+          ...user,
+          ...updatedUser
+        })
+        mockRepository.create.mockReturnValue({
+          ...user,
+          ...updatedUser
+        })
+
+        const resultUser = await service.updateUser('1', {
+          ...user,
+          name: 'Nome Atualizado'
+        })
+
+        expect(resultUser).toMatchObject(updatedUser)
+        expect(mockRepository.findOne).toBeCalledTimes(1)
+        expect(mockRepository.create).toBeCalledTimes(1)
+        expect(mockRepository.update).toBeCalledTimes(1)
+      })
+    })
+
+    describe('deleteUser', () => {
+      it('should delete a existing user', async () => {
+        const user = TestUtil.giveAMeAValidUser()
+        mockRepository.delete.mockReturnValue(user)
+        mockRepository.findOne.mockReturnValue(user)
+
+        const deletedUser = await service.deleteUser('1')
+
+        expect(deletedUser).toBe(true);
+        expect(mockRepository.findOne).toBeCalledTimes(1)
+        expect(mockRepository.delete).toBeCalledTimes(1)
+      })
+      it('should not delete a inexisting user', async () => {
+        const user = TestUtil.giveAMeAValidUser()
+        mockRepository.delete.mockReturnValue(null)
+        mockRepository.findOne.mockReturnValue(user)
+
+        const deletedUser = await service.deleteUser('3')
+
+        expect(deletedUser).toBe(false);
+        expect(mockRepository.findOne).toBeCalledTimes(1)
+        expect(mockRepository.delete).toBeCalledTimes(1)
+      })
+    })
 });
